@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "compilerPath": "/usr/bin/gcc",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "c99",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src"
+            ],
+            "defines": [
+                "_POSIX_C_SOURCE=200809L"
+            ],
+            "compileCommands": "${workspaceFolder}/compile_commands.json",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/include",
+                    "${workspaceFolder}/src"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}
