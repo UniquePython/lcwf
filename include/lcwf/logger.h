@@ -1,0 +1,50 @@
+
+#ifndef LCWF_LOGGER_H_
+#define LCWF_LOGGER_H_
+
+#include <stdbool.h>
+#include <stdio.h>
+
+#include "lcwf/text_case.h"
+
+typedef struct LCWF_Logger LCWF_Logger;
+
+typedef enum LCWF_LogLevel
+{
+    LCWF_LOG_LEVEL_DEBUG = 0,
+    LCWF_LOG_LEVEL_INFO,
+    LCWF_LOG_LEVEL_WARNING,
+    LCWF_LOG_LEVEL_ERROR,
+    LCWF_LOG_LEVEL_COUNT,
+} LCWF_LogLevel;
+
+const char *LCWF_LogLevelToString(LCWF_LogLevel level, LCWF_TextCase textCase);
+
+static inline const char *LCWF_LogLevelToLowercaseString(LCWF_LogLevel level)
+{
+    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_LOWER);
+}
+
+static inline const char *LCWF_LogLevelToTitlecaseString(LCWF_LogLevel level)
+{
+    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_TITLE);
+}
+
+static inline const char *LCWF_LogLevelToUppercaseString(LCWF_LogLevel level)
+{
+    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_UPPER);
+}
+
+bool LCWF_CreateLogger(LCWF_Logger **out);
+void LCWF_DestroyLogger(LCWF_Logger **logger);
+
+bool LCWF_SetMinimumLogLevel(LCWF_Logger *logger, LCWF_LogLevel level);
+
+LCWF_LogLevel LCWF_GetMinimumLogLevel(const LCWF_Logger *logger);
+
+bool LCWF_SetLogStream(LCWF_Logger *logger, LCWF_LogLevel level, FILE *streams);
+FILE *LCWF_GetLogStream(const LCWF_Logger *logger, LCWF_LogLevel level);
+
+void LCWF_Log(LCWF_Logger *logger, LCWF_LogLevel level, const char *format, ...);
+
+#endif
