@@ -1,5 +1,5 @@
-#ifndef LCWF_TRANSPORT_TRANSPORT_H_
-#define LCWF_TRANSPORT_TRANSPORT_H_
+#ifndef LCWF_TRANSPORT_H_
+#define LCWF_TRANSPORT_H_
 
 #include <stdbool.h>
 #include <stddef.h>

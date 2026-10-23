@@ -1,7 +1,7 @@
 #ifndef PRIVATE_TRANSPORT_TRANSPORT_H_
 #define PRIVATE_TRANSPORT_TRANSPORT_H_
 
-#include "lcwf/transport/transport.h"
+#include "lcwf/transport.h"
 
 struct LCWF_Transport
 {
