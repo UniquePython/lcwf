@@ -5,8 +5,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "lcwf/text_case.h"
-
 typedef struct LCWF_Logger LCWF_Logger;
 
 typedef enum LCWF_LogLevel
@@ -18,22 +16,9 @@ typedef enum LCWF_LogLevel
     LCWF_LOG_LEVEL_COUNT,
 } LCWF_LogLevel;
 
-const char *LCWF_LogLevelToString(LCWF_LogLevel level, LCWF_TextCase textCase);
-
-static inline const char *LCWF_LogLevelToLowercaseString(LCWF_LogLevel level)
-{
-    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_LOWER);
-}
-
-static inline const char *LCWF_LogLevelToTitlecaseString(LCWF_LogLevel level)
-{
-    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_TITLE);
-}
-
-static inline const char *LCWF_LogLevelToUppercaseString(LCWF_LogLevel level)
-{
-    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_UPPER);
-}
+const char *LCWF_LogLevelToLowercaseString(LCWF_LogLevel level);
+const char *LCWF_LogLevelToTitlecaseString(LCWF_LogLevel level);
+const char *LCWF_LogLevelToUppercaseString(LCWF_LogLevel level);
 
 bool LCWF_CreateLogger(LCWF_Logger **out);
 void LCWF_DestroyLogger(LCWF_Logger **logger);

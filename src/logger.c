@@ -44,6 +44,21 @@ const char *LCWF_LogLevelToString(LCWF_LogLevel level, LCWF_TextCase textCase)
     return logLevelAsString[level][textCase];
 }
 
+const char *LCWF_LogLevelToLowercaseString(LCWF_LogLevel level)
+{
+    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_LOWER);
+}
+
+const char *LCWF_LogLevelToTitlecaseString(LCWF_LogLevel level)
+{
+    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_TITLE);
+}
+
+const char *LCWF_LogLevelToUppercaseString(LCWF_LogLevel level)
+{
+    return LCWF_LogLevelToString(level, LCWF_TEXT_CASE_UPPER);
+}
+
 bool LCWF_IsValidLogLevel(LCWF_LogLevel level)
 {
     return level >= LCWF_LOG_LEVEL_DEBUG && level < LCWF_LOG_LEVEL_COUNT;
