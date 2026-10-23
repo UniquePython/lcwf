@@ -81,11 +81,11 @@ static const char *const statusAsString[LCWF_STATUS_COUNT + 1][LCWF_TEXT_CASE_CO
 
 const char *LCWF_StatusToString(LCWF_Status status, LCWF_TextCase textCase)
 {
-    if (!LCWF_IsValidStatus(status))
-        return statusAsString[LCWF_STATUS_COUNT][LCWF_TEXT_CASE_UPPER];
-
     if (!LCWF_IsValidCase(textCase))
         textCase = LCWF_TEXT_CASE_UPPER;
+
+    if (!LCWF_IsValidStatus(status))
+        return statusAsString[LCWF_STATUS_COUNT][textCase];
 
     return statusAsString[status][textCase];
 }

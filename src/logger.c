@@ -35,11 +35,11 @@ static const char *const logLevelAsString[LCWF_LOG_LEVEL_COUNT + 1][LCWF_TEXT_CA
 
 const char *LCWF_LogLevelToString(LCWF_LogLevel level, LCWF_TextCase textCase)
 {
-    if (!LCWF_IsValidLogLevel(level))
-        return logLevelAsString[LCWF_LOG_LEVEL_COUNT][LCWF_TEXT_CASE_UPPER];
-
     if (!LCWF_IsValidCase(textCase))
         textCase = LCWF_TEXT_CASE_UPPER;
+
+    if (!LCWF_IsValidLogLevel(level))
+        return logLevelAsString[LCWF_LOG_LEVEL_COUNT][textCase];
 
     return logLevelAsString[level][textCase];
 }
