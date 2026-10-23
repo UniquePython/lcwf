@@ -16,6 +16,7 @@ WARNINGS := \
 	-Wformat=2 \
 	-Wundef \
 	-Wstrict-prototypes \
+	-Wmissing-prototypes \
 	-Wold-style-definition \
 	-Wimplicit-fallthrough \
 	-Wlogical-op \

@@ -23,4 +23,8 @@ typedef enum LCWF_Status
 
 } LCWF_Status;
 
+const char *LCWF_StatusToLowercaseString(LCWF_Status status);
+const char *LCWF_StatusToTitlecaseString(LCWF_Status status);
+const char *LCWF_StatusToUppercaseString(LCWF_Status status);
+
 #endif
