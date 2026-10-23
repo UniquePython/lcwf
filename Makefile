@@ -1,7 +1,7 @@
 CC       := gcc
 STD      := -std=c99
 
-INCLUDE  := -Iinclude
+INCLUDE  := -Iinclude -Isrc
 
 WARNINGS := \
 	-Werror \
