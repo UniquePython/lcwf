@@ -1,5 +1,5 @@
-#ifndef LCWF_LISTENER_H_
-#define LCWF_LISTENER_H_
+#ifndef PRIVATE_SERVER_H_
+#define PRIVATE_SERVER_H_
 
 #include <stdbool.h>
 #include <stdint.h>

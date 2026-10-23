@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "lcwf/server.h"
+#include "private/server.h"
 
 bool LCWF_GetServerFd(const char *address, uint16_t port, unsigned int backlog, unsigned int *outFd)
 {
