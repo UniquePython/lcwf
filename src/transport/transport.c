@@ -1,18 +1,25 @@
-#include <limits.h>
-
 #include "private/memory.h"
+#include "private/status.h"
 #include "private/transport/transport.h"
 
-bool LCWF_CreateTransport(LCWF_Transport **out)
+bool LCWF_CreateTransport(LCWF_Transport **out, LCWF_Status *status)
 {
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
     if (out == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
 
     *out = NULL;
 
     LCWF_Transport *transport;
     if (!LCWF_Alloc(&transport))
+    {
+        LCWF_SetStatus(LCWF_STATUS_ALLOC_FAILED, status);
         return false;
+    }
 
     transport->context = NULL;
     transport->read = NULL;
@@ -27,88 +34,119 @@ void LCWF_DestroyTransport(LCWF_Transport **transport)
     LCWF_Dealloc(transport);
 }
 
-bool LCWF_RegisterTransportContext(LCWF_Transport *transport, void *context)
+bool LCWF_RegisterTransportContext(LCWF_Transport *transport, void *context, LCWF_Status *status)
 {
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
     if (transport == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
 
     transport->context = context;
     return true;
 }
 
-bool LCWF_RegisterTransportReadFn(LCWF_Transport *transport, LCWF_TransportReadFn const fn)
+bool LCWF_RegisterTransportReadFn(LCWF_Transport *transport, LCWF_TransportReadFn const fn, LCWF_Status *status)
 {
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
     if (transport == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
 
     transport->read = fn;
     return true;
 }
 
-bool LCWF_RegisterTransportWriteFn(LCWF_Transport *transport, LCWF_TransportWriteFn const fn)
+bool LCWF_RegisterTransportWriteFn(LCWF_Transport *transport, LCWF_TransportWriteFn const fn, LCWF_Status *status)
 {
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
     if (transport == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
 
     transport->write = fn;
     return true;
 }
 
-ssize_t LCWF_TransportRead(LCWF_Transport *transport, void *destination, size_t maxLength)
+bool LCWF_TransportRead(LCWF_Transport *transport, void *destination, size_t maxLength, size_t *written, LCWF_Status *status)
 {
-    if (transport == NULL)
-        return -2;
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (transport == NULL || destination == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
+        return false;
+    }
 
     if (transport->read == NULL)
-        return -3;
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_CALLABLE, status);
+        return false;
+    }
 
-    if (destination == NULL)
-        return -4;
-
-    return transport->read(transport->context, destination, maxLength);
-}
-ssize_t LCWF_TransportWrite(LCWF_Transport *transport, const void *source, size_t length)
-{
-    if (transport == NULL)
-        return -2;
-
-    if (transport->write == NULL)
-        return -3;
-
-    if (source == NULL)
-        return -4;
-
-    return transport->write(transport->context, source, length);
+    return transport->read(transport->context, destination, maxLength, written, status);
 }
 
-ssize_t LCWF_TransportWriteAll(LCWF_Transport *transport, const void *source, size_t length)
+bool LCWF_TransportWrite(LCWF_Transport *transport, const void *source, size_t length, size_t *written, LCWF_Status *status)
 {
-    if (transport == NULL)
-        return -2;
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (transport == NULL || (source == NULL && length > 0))
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
+        return false;
+    }
 
     if (transport->write == NULL)
-        return -3;
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_CALLABLE, status);
+        return false;
+    }
 
-    if (source == NULL)
-        return -4;
+    return transport->write(transport->context, source, length, written, status);
+}
 
-    if (length > (size_t)SSIZE_MAX)
-        return -5;
+bool LCWF_TransportWriteAll(LCWF_Transport *transport, const void *source, size_t length, LCWF_Status *status)
+{
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (transport == NULL || (source == NULL && length > 0))
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
+        return false;
+    }
+
+    if (transport->write == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_CALLABLE, status);
+        return false;
+    }
 
     size_t totalWritten = 0;
 
     while (totalWritten < length)
     {
-        ssize_t written = LCWF_TransportWrite(transport, (const unsigned char *)source + totalWritten, length - totalWritten);
+        size_t written = 0;
 
-        if (written < 0)
-            return totalWritten > 0 ? (ssize_t)totalWritten : written;
+        if (!LCWF_TransportWrite(transport, (const unsigned char *)source + totalWritten, length - totalWritten, &written, status))
+            return false;
 
-        if (written == 0)
-            return totalWritten > 0 ? (ssize_t)totalWritten : -5;
+        if (written == 0 || written > length - totalWritten)
+        {
+            LCWF_SetStatus(LCWF_STATUS_WRITE_FAILED, status);
+            return false;
+        }
 
-        totalWritten += (size_t)written;
+        totalWritten += written;
     }
 
-    return (ssize_t)totalWritten;
+    return true;
 }

@@ -1,6 +1,6 @@
 #include <stdarg.h>
-#include <stdlib.h>
 
+#include "private/status.h"
 #include "private/text_case.h"
 #include "private/logger.h"
 #include "private/memory.h"
@@ -35,11 +35,11 @@ static const char *const logLevelAsString[LCWF_LOG_LEVEL_COUNT + 1][LCWF_TEXT_CA
 
 const char *LCWF_LogLevelToString(LCWF_LogLevel level, LCWF_TextCase textCase)
 {
-    if (!LCWF_IsValidCase(textCase))
+    if (!LCWF_IsValidLogLevel(level))
         return logLevelAsString[LCWF_LOG_LEVEL_COUNT][LCWF_TEXT_CASE_UPPER];
 
-    if (!LCWF_IsValidLogLevel(level))
-        return logLevelAsString[LCWF_LOG_LEVEL_COUNT][textCase];
+    if (!LCWF_IsValidCase(textCase))
+        textCase = LCWF_TEXT_CASE_UPPER;
 
     return logLevelAsString[level][textCase];
 }
@@ -64,16 +64,24 @@ bool LCWF_IsValidLogLevel(LCWF_LogLevel level)
     return level >= LCWF_LOG_LEVEL_DEBUG && level < LCWF_LOG_LEVEL_COUNT;
 }
 
-bool LCWF_CreateLogger(LCWF_Logger **out)
+bool LCWF_CreateLogger(LCWF_Logger **out, LCWF_Status *status)
 {
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
     if (out == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
 
     *out = NULL;
 
     LCWF_Logger *logger;
     if (!LCWF_Alloc(&logger))
+    {
+        LCWF_SetStatus(LCWF_STATUS_ALLOC_FAILED, status);
         return false;
+    }
 
     logger->minimumLevel = LCWF_LOG_LEVEL_INFO;
 
@@ -91,10 +99,21 @@ void LCWF_DestroyLogger(LCWF_Logger **logger)
     LCWF_Dealloc(logger);
 }
 
-bool LCWF_SetMinimumLogLevel(LCWF_Logger *logger, LCWF_LogLevel level)
+bool LCWF_SetMinimumLogLevel(LCWF_Logger *logger, LCWF_LogLevel level, LCWF_Status *status)
 {
-    if (logger == NULL || !LCWF_IsValidLogLevel(level))
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (logger == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
+
+    if (!LCWF_IsValidLogLevel(level))
+    {
+        LCWF_SetStatus(LCWF_STATUS_INVALID_ENUM, status);
+        return false;
+    }
 
     logger->minimumLevel = level;
     return true;
@@ -108,19 +127,41 @@ LCWF_LogLevel LCWF_GetMinimumLogLevel(const LCWF_Logger *logger)
     return logger->minimumLevel;
 }
 
-bool LCWF_SetLogStream(LCWF_Logger *logger, LCWF_LogLevel level, FILE *stream)
+bool LCWF_SetLogStream(LCWF_Logger *logger, LCWF_LogLevel level, FILE *stream, LCWF_Status *status)
 {
-    if (logger == NULL || !LCWF_IsValidLogLevel(level) || stream == NULL)
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (logger == NULL || stream == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
+    }
+
+    if (!LCWF_IsValidLogLevel(level))
+    {
+        LCWF_SetStatus(LCWF_STATUS_INVALID_ENUM, status);
+        return false;
+    }
 
     logger->streams[level] = stream;
     return true;
 }
 
-FILE *LCWF_GetLogStream(const LCWF_Logger *logger, LCWF_LogLevel level)
+FILE *LCWF_GetLogStream(const LCWF_Logger *logger, LCWF_LogLevel level, LCWF_Status *status)
 {
-    if (logger == NULL || !LCWF_IsValidLogLevel(level))
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (logger == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return NULL;
+    }
+
+    if (!LCWF_IsValidLogLevel(level))
+    {
+        LCWF_SetStatus(LCWF_STATUS_INVALID_ENUM, status);
+        return NULL;
+    }
 
     return logger->streams[level];
 }
