@@ -75,7 +75,7 @@ bool LCWF_CreateLogger(LCWF_Logger **out, LCWF_Status *status)
     }
 
     LCWF_Logger *logger;
-    if (!LCWF_Alloc(&logger))
+    if (!LCWF_AllocAuto(&logger))
     {
         LCWF_SetStatus(LCWF_STATUS_ALLOC_FAILED, status);
         return false;

@@ -27,6 +27,11 @@ static const char *const statusAsString[LCWF_STATUS_COUNT + 1][LCWF_TEXT_CASE_CO
         [LCWF_TEXT_CASE_TITLE] = "Ok",
         [LCWF_TEXT_CASE_UPPER] = "OK",
     },
+    [LCWF_STATUS_OVERFLOW] = {
+        [LCWF_TEXT_CASE_LOWER] = "overflow",
+        [LCWF_TEXT_CASE_TITLE] = "Overflow",
+        [LCWF_TEXT_CASE_UPPER] = "OVERFLOW",
+    },
     [LCWF_STATUS_INVALID_PARAM] = {
         [LCWF_TEXT_CASE_LOWER] = "invalid param",
         [LCWF_TEXT_CASE_TITLE] = "Invalid Param",

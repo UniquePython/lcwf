@@ -13,7 +13,7 @@ bool LCWF_CreateTransport(LCWF_Transport **out, LCWF_Status *status)
     }
 
     LCWF_Transport *transport;
-    if (!LCWF_Alloc(&transport))
+    if (!LCWF_AllocAuto(&transport))
     {
         LCWF_SetStatus(LCWF_STATUS_ALLOC_FAILED, status);
         return false;

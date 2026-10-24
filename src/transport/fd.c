@@ -86,7 +86,7 @@ bool LCWF_CreateFdTransport(unsigned int fd, LCWF_FdTransport **out, LCWF_Status
     }
 
     LCWF_FdTransport *transport;
-    if (!LCWF_Alloc(&transport))
+    if (!LCWF_AllocAuto(&transport))
     {
         LCWF_SetStatus(LCWF_STATUS_ALLOC_FAILED, status);
         return false;
