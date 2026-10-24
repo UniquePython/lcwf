@@ -72,6 +72,11 @@ static const char *const statusAsString[LCWF_STATUS_COUNT + 1][LCWF_TEXT_CASE_CO
         [LCWF_TEXT_CASE_TITLE] = "Socket Failed",
         [LCWF_TEXT_CASE_UPPER] = "SOCKET FAILED",
     },
+    [LCWF_STATUS_ACCEPT_FAILED] = {
+        [LCWF_TEXT_CASE_LOWER] = "accept failed",
+        [LCWF_TEXT_CASE_TITLE] = "Accept Failed",
+        [LCWF_TEXT_CASE_UPPER] = "ACCEPT FAILED",
+    },
     [LCWF_STATUS_COUNT] = {
         [LCWF_TEXT_CASE_LOWER] = "unknown",
         [LCWF_TEXT_CASE_TITLE] = "Unknown",

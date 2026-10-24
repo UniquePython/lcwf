@@ -72,3 +72,29 @@ cleanup:
     close(fd);
     return false;
 }
+
+bool LCWF_AcceptClient(unsigned int serverFd, unsigned int *clientFd, LCWF_Status *status)
+{
+    LCWF_SetStatus(LCWF_STATUS_OK, status);
+
+    if (clientFd == NULL)
+    {
+        LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
+        return false;
+    }
+
+    int fd;
+    do
+    {
+        fd = accept((int)serverFd, NULL, NULL);
+    } while (fd < 0 && errno == EINTR);
+
+    if (fd < 0)
+    {
+        LCWF_SetStatus(LCWF_STATUS_ACCEPT_FAILED, status);
+        return false;
+    }
+
+    *clientFd = (unsigned int)fd;
+    return true;
+}
