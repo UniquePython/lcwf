@@ -15,9 +15,6 @@ static bool LCWF_FdTransportReadFn(void *context, void *destination, size_t maxL
         return false;
     }
 
-    if (written != NULL)
-        *written = 0;
-
     LCWF_FdTransport *transport = context;
 
     size_t request = maxLength;
@@ -53,9 +50,6 @@ static bool LCWF_FdTransportWriteFn(void *context, const void *source, size_t le
         return false;
     }
 
-    if (written != NULL)
-        *written = 0;
-
     LCWF_FdTransport *transport = context;
 
     size_t request = length;
@@ -90,8 +84,6 @@ bool LCWF_CreateFdTransport(unsigned int fd, LCWF_FdTransport **out, LCWF_Status
         LCWF_SetStatus(LCWF_STATUS_NULL_PARAM, status);
         return false;
     }
-
-    *out = NULL;
 
     LCWF_FdTransport *transport;
     if (!LCWF_Alloc(&transport))

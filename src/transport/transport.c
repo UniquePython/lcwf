@@ -12,8 +12,6 @@ bool LCWF_CreateTransport(LCWF_Transport **out, LCWF_Status *status)
         return false;
     }
 
-    *out = NULL;
-
     LCWF_Transport *transport;
     if (!LCWF_Alloc(&transport))
     {

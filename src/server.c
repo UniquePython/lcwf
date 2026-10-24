@@ -19,8 +19,6 @@ bool LCWF_GetServerFd(const char *address, uint16_t port, unsigned int backlog, 
         return false;
     }
 
-    *outFd = 0;
-
     if (backlog > INT_MAX)
     {
         LCWF_SetStatus(LCWF_STATUS_INVALID_PARAM, status);

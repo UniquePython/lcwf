@@ -74,8 +74,6 @@ bool LCWF_CreateLogger(LCWF_Logger **out, LCWF_Status *status)
         return false;
     }
 
-    *out = NULL;
-
     LCWF_Logger *logger;
     if (!LCWF_Alloc(&logger))
     {
